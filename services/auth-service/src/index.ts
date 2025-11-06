@@ -4,6 +4,7 @@ import helmet from "helmet";
 // load environment variables
 import "dotenv/config";
 import authRoutes from "./routes";
+import { errorHandler } from "../../../shared/middleware";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -21,6 +22,9 @@ app.use("/auth", authRoutes);
 app.use("/health", (_req, res) => {
   res.send({ message: "Welcome to authservice!" });
 });
+
+// Error handling middleware
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Auth service is running on port ${PORT}`);

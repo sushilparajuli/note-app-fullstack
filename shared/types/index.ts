@@ -1,5 +1,4 @@
 // shared typescript type definations for all microservices
-
 export interface User {
   id: string;
   email: string;
@@ -44,4 +43,13 @@ export class ServiceError extends Error {
     this.code = code;
     this.details = details;
   }
+}
+
+export function logError(error: Error, context?: Record<string, any>): void {
+  console.error("Error Occured:", {
+    message: error.message,
+    stack: error.stack,
+    context,
+    timestamp: new Date().toISOString(),
+  });
 }

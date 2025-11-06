@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as authController from "./authController";
 import { validateRequest } from "../../../shared/middleware";
-import { loginSchema, registerSchema } from "./validation";
+import { loginSchema, registerSchema, refreshTokenSchema } from "./validation";
 
 const router = Router();
 
@@ -12,6 +12,23 @@ router.post(
   authController.register
 );
 
-router.post("/register", validateRequest(loginSchema), authController.login);
+router.post("/login", validateRequest(loginSchema), authController.login);
+router.post(
+  "/refresh-token",
+  validateRequest(refreshTokenSchema),
+  authController.refreshToken
+);
+router.post(
+  "/logout",
+  validateRequest(refreshTokenSchema),
+  authController.logout
+);
+
+// token validation endpoint (for other services to validate token)
+router.post("/validate", authController.validateToken);
+
+// protected routes
+router.get("/profile", authController.getProfile);
+router.delete("/profile", authController.deleteAccount);
 
 export default router;
