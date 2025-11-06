@@ -1,4 +1,4 @@
-import { ApiResponse } from "../types";
+import { ApiResponse, ServiceError } from "../types";
 
 export function createApiResponse<T>(
   success: boolean,
@@ -12,4 +12,24 @@ export function createApiResponse<T>(
     message,
     error,
   };
+}
+
+export function createSuccessResponse<T>(
+  data?: T,
+  message?: string
+): ApiResponse<T> {
+  return createApiResponse(true, data, message);
+}
+
+export function createFailureResponse(error?: string): ApiResponse {
+  return createApiResponse(false, undefined, undefined, error);
+}
+
+export function createServiceError(
+  message: string,
+  statusCode: number = 500,
+  code?: string,
+  details?: any
+): ServiceError {
+  return new ServiceError(message, statusCode, code, details);
 }
