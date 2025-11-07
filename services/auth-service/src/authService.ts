@@ -29,7 +29,7 @@ export class AuthService {
     // check  is user already exists
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
-      throw createServiceError("User already exists", 400);
+      throw createServiceError("User already exists", 409);
     }
 
     // hash the password
@@ -124,7 +124,7 @@ export class AuthService {
     // verify the password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!user) {
+    if (!isPasswordValid) {
       throw createServiceError("Invalid email or password", 401);
     }
 
